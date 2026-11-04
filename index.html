@@ -4,356 +4,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduBot AI - Smart School Assistant</title>
+<title>EduBot AI - Groq School Assistant</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#eef2ff;
+  color:#172554;
+  min-height:100vh;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f1f5ff;
-  color: #172554;
-  min-height: 100vh;
+header{
+  background:linear-gradient(120deg,#172554,#2563eb,#0891b2);
+  color:white;
+  padding:20px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
 }
 
-header {
-  background: linear-gradient(120deg,#172554,#2563eb,#0891b2);
-  color: white;
-  padding: 18px 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+.logo{font-size:27px;font-weight:bold}
+.logo span{color:#fde047}
+header small{display:block;margin-top:5px;color:#dbeafe}
+
+main{
+  max-width:1100px;
+  margin:30px auto;
+  padding:15px;
 }
 
-.logo {
-  font-size: 27px;
-  font-weight: bold;
+.hero{
+  background:linear-gradient(120deg,#4338ca,#2563eb,#0891b2);
+  color:white;
+  padding:30px;
+  border-radius:20px;
+  margin-bottom:25px;
 }
 
-.logo span {
-  color: #fde047;
+.hero h1{font-size:30px;margin-bottom:12px}
+.hero p{line-height:1.7}
+
+h2{margin:25px 0 15px}
+
+.subjects{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:15px;
 }
 
-header small {
-  display: block;
-  margin-top: 5px;
-  color: #dbeafe;
+.subject{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  cursor:pointer;
+  box-shadow:0 5px 18px #1e3a8a12;
+  transition:.2s;
 }
 
-.header-right {
-  font-size: 14px;
+.subject:hover{transform:translateY(-4px)}
+.subject .emoji{font-size:30px}
+.subject h3{margin:10px 0;color:#3730a3}
+.subject p{font-size:13px;color:#64748b}
+
+.chat{
+  background:white;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 5px 20px #1e3a8a15;
 }
 
-main {
-  max-width: 1150px;
-  margin: 30px auto;
-  padding: 15px;
+.chat-head{
+  background:#1e40af;
+  color:white;
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
 }
 
-.hero {
-  background: linear-gradient(120deg,#4338ca,#2563eb,#0891b2);
-  padding: 35px;
-  border-radius: 22px;
-  color: white;
-  margin-bottom: 25px;
-  box-shadow: 0 8px 25px #1e40af25;
+.chat-head small{
+  display:block;
+  color:#bfdbfe;
+  margin-top:5px;
 }
 
-.hero h1 {
-  font-size: 32px;
-  margin-bottom: 12px;
+.messages{
+  height:400px;
+  overflow-y:auto;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  background:#f8faff;
 }
 
-.hero p {
-  line-height: 1.7;
-  max-width: 700px;
+.msg{
+  max-width:85%;
+  padding:13px 16px;
+  border-radius:14px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font-size:14px;
 }
 
-.hero button {
-  margin-top: 18px;
-  background: #facc15;
-  color: #172554;
+.bot{background:#e0e7ff;align-self:flex-start}
+.user{background:#2563eb;color:white;align-self:flex-end}
+.typing{color:#64748b;font-style:italic}
+
+.input-area{
+  display:flex;
+  gap:10px;
+  padding:15px;
+  border-top:1px solid #e2e8f0;
 }
 
-.section-title {
-  margin: 25px 0 15px;
-  font-size: 22px;
+input,select{
+  padding:13px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  font-size:14px;
+  outline:none;
 }
 
-.subjects {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
-  gap: 15px;
-  margin-bottom: 25px;
+input:focus,select:focus{border-color:#2563eb}
+
+#question{flex:1;min-width:0}
+
+button{
+  border:0;
+  background:#4f46e5;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.subject {
-  background: white;
-  padding: 22px;
-  border-radius: 16px;
-  cursor: pointer;
-  border: 1px solid #e2e8f0;
-  transition: .25s;
-  box-shadow: 0 5px 15px #1e3a8a0c;
+button:hover{background:#3730a3}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+.clear{
+  background:#ffffff25;
+  color:white;
 }
 
-.subject:hover {
-  transform: translateY(-5px);
-  border-color: #60a5fa;
-  box-shadow: 0 8px 20px #2563eb20;
+.tools{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:0 15px 15px;
 }
 
-.subject .emoji {
-  font-size: 32px;
+.tools button{
+  background:#eff6ff;
+  color:#1e40af;
+  font-size:12px;
 }
 
-.subject h3 {
-  margin: 12px 0 7px;
-  color: #3730a3;
+.settings{
+  background:white;
+  margin-top:25px;
+  padding:22px;
+  border-radius:16px;
+  box-shadow:0 5px 18px #1e3a8a10;
 }
 
-.subject p {
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.5;
+.settings label{
+  display:block;
+  font-weight:bold;
+  margin:15px 0 7px;
+  font-size:13px;
 }
 
-.chat-box {
-  background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 7px 25px #1e3a8a18;
-  border: 1px solid #e2e8f0;
+.settings input,.settings select{width:100%}
+
+.settings button{margin-top:15px}
+
+.note{
+  color:#64748b;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:12px;
 }
 
-.chat-header {
-  background: #1e40af;
-  color: white;
-  padding: 17px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+.status{font-size:13px;margin-top:12px}
+
+footer{
+  text-align:center;
+  padding:25px;
+  color:#64748b;
 }
 
-.bot-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.bot-icon {
-  width: 43px;
-  height: 43px;
-  border-radius: 50%;
-  background: #dbeafe;
-  display: grid;
-  place-items: center;
-  font-size: 23px;
-}
-
-.bot-info small {
-  display: block;
-  color: #bfdbfe;
-  margin-top: 4px;
-}
-
-.online {
-  color: #86efac;
-  font-size: 12px;
-}
-
-.clear-btn {
-  background: #ffffff20;
-  color: white;
-  padding: 9px 12px;
-}
-
-.messages {
-  height: 400px;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background: #f8faff;
-}
-
-.msg {
-  max-width: 85%;
-  padding: 13px 16px;
-  border-radius: 15px;
-  line-height: 1.65;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font-size: 14px;
-}
-
-.bot {
-  background: #e0e7ff;
-  color: #172554;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-.user {
-  background: #2563eb;
-  color: white;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.typing {
-  color: #64748b;
-  font-style: italic;
-}
-
-.input-area {
-  padding: 15px;
-  display: flex;
-  gap: 10px;
-  border-top: 1px solid #e2e8f0;
-  background: white;
-}
-
-input, select {
-  padding: 13px;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-}
-
-input:focus, select:focus {
-  border-color: #2563eb;
-}
-
-#question {
-  flex: 1;
-  min-width: 0;
-}
-
-button {
-  border: none;
-  padding: 13px 19px;
-  background: #4f46e5;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: .2s;
-}
-
-button:hover {
-  background: #3730a3;
-}
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  padding: 0 15px 15px;
-  background: white;
-}
-
-.tool-btn {
-  background: #eff6ff;
-  color: #1e40af;
-  font-size: 12px;
-  padding: 10px 13px;
-}
-
-.settings {
-  background: white;
-  padding: 22px;
-  border-radius: 17px;
-  margin-top: 25px;
-  border: 1px solid #e2e8f0;
-}
-
-.settings h3 {
-  margin-bottom: 13px;
-}
-
-.settings label {
-  display: block;
-  font-weight: bold;
-  font-size: 13px;
-  margin: 12px 0 7px;
-}
-
-.settings input, .settings select {
-  width: 100%;
-}
-
-.settings button {
-  margin-top: 13px;
-}
-
-.note {
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.6;
-  margin-top: 12px;
-}
-
-.status {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #475569;
-}
-
-footer {
-  text-align: center;
-  padding: 25px;
-  color: #64748b;
-  font-size: 13px;
-}
-
-@media(max-width:600px) {
-  header {
-    padding: 17px 5%;
-  }
-
-  .hero {
-    padding: 25px 20px;
-  }
-
-  .hero h1 {
-    font-size: 25px;
-  }
-
-  .messages {
-    height: 420px;
-    padding: 13px;
-  }
-
-  .input-area {
-    flex-wrap: wrap;
-  }
-
-  #question {
-    flex-basis: 100%;
-  }
-
-  .input-area button {
-    flex: 1;
-  }
-
-  .msg {
-    max-width: 94%;
-  }
+@media(max-width:600px){
+  .hero h1{font-size:24px}
+  .input-area{flex-wrap:wrap}
+  #question{flex-basis:100%}
+  .input-area button{flex:1}
+  .messages{height:420px}
+  .msg{max-width:95%}
 }
 </style>
 </head>
@@ -363,9 +217,9 @@ footer {
 <header>
   <div>
     <div class="logo">🎓 EduBot <span>AI</span></div>
-    <small>Smart School Assistant</small>
+    <small>Smart School Assistant powered by Groq</small>
   </div>
-  <div class="header-right">📚 Learn • Ask • Grow</div>
+  <div>📚 Learn • Ask • Grow</div>
 </header>
 
 <main>
@@ -373,196 +227,184 @@ footer {
 <section class="hero">
   <h1>नमस्ते विद्यार्थी! 👋</h1>
   <p>
-    EduBot AI में आपका स्वागत है। यहाँ आप अपने स्कूल के
-    सवाल पूछ सकते हैं, कठिन विषयों को आसान भाषा में समझ
-    सकते हैं और अपनी पढ़ाई को बेहतर बना सकते हैं।
+    आपका अपना AI School Assistant।
+    गणित, विज्ञान, अंग्रेजी, सामान्य ज्ञान और
+    होमवर्क से जुड़े सवाल पूछिए।
   </p>
-  <button onclick="focusChat()">💬 AI से बात करें</button>
 </section>
 
-<h2 class="section-title">📚 अपने विषय चुनें</h2>
+<h2>📚 Explore Subjects</h2>
 
 <section class="subjects">
 
-  <div class="subject" onclick="ask('मुझे गणित के बारे में आसान भाषा में पढ़ाइए।')">
+  <div class="subject" onclick="ask('मुझे गणित आसान भाषा में सिखाइए।')">
     <div class="emoji">🔢</div>
-    <h3>गणित</h3>
-    <p>जोड़, घटाव, गुणा, भाग और अन्य सवाल।</p>
+    <h3>Mathematics</h3>
+    <p>गणित सीखें।</p>
   </div>
 
-  <div class="subject" onclick="ask('मुझे विज्ञान के महत्वपूर्ण विषय समझाइए।')">
+  <div class="subject" onclick="ask('मुझे विज्ञान के बारे में समझाइए।')">
     <div class="emoji">🔬</div>
-    <h3>विज्ञान</h3>
-    <p>विज्ञान के सिद्धांत और रोचक तथ्य।</p>
+    <h3>Science</h3>
+    <p>विज्ञान सीखें।</p>
   </div>
 
   <div class="subject" onclick="ask('मुझे English Grammar सिखाइए।')">
     <div class="emoji">📖</div>
     <h3>English</h3>
-    <p>Grammar और Vocabulary सीखें।</p>
+    <p>Grammar और Vocabulary।</p>
   </div>
 
-  <div class="subject" onclick="ask('मुझे सामान्य ज्ञान के 10 प्रश्न दीजिए।')">
+  <div class="subject" onclick="ask('मुझे 10 सामान्य ज्ञान के प्रश्न दीजिए।')">
     <div class="emoji">🌍</div>
-    <h3>सामान्य ज्ञान</h3>
-    <p>दुनिया और भारत के रोचक तथ्य।</p>
+    <h3>GK</h3>
+    <p>सामान्य ज्ञान।</p>
   </div>
 
   <div class="subject" onclick="ask('मेरे होमवर्क को समझने में मदद कीजिए।')">
     <div class="emoji">📝</div>
-    <h3>होमवर्क</h3>
-    <p>अपने होमवर्क को समझें।</p>
+    <h3>Homework</h3>
+    <p>होमवर्क में मदद।</p>
   </div>
 
-  <div class="subject" onclick="ask('मेरे लिए एक दैनिक पढ़ाई का टाइम टेबल बनाइए।')">
+  <div class="subject" onclick="ask('मेरे लिए एक Study Timetable बनाइए।')">
     <div class="emoji">📅</div>
     <h3>Study Planner</h3>
-    <p>पढ़ाई का टाइम टेबल बनाएं।</p>
+    <p>पढ़ाई का टाइम टेबल।</p>
   </div>
 
 </section>
 
-<h2 class="section-title">🤖 EduBot AI Chat Assistant</h2>
+<h2>🤖 EduBot AI Chat</h2>
 
-<section class="chat-box">
+<section class="chat">
 
-  <div class="chat-header">
-    <div class="bot-info">
-      <div class="bot-icon">🤖</div>
-      <div>
-        <strong>EduBot AI Assistant</strong>
-        <small><span class="online">●</span> आपका स्कूल सहायक</small>
-      </div>
+  <div class="chat-head">
+    <div>
+      <strong>🤖 EduBot AI Assistant</strong>
+      <small>Powered by Groq AI</small>
     </div>
-    <button class="clear-btn" onclick="clearChat()">🗑 Clear</button>
+    <button class="clear" onclick="clearChat()">Clear Chat</button>
   </div>
 
   <div class="messages" id="messages">
     <div class="msg bot">
       नमस्ते! 😊 मैं EduBot AI हूँ।
 
-      मैं आपकी पढ़ाई में मदद कर सकता हूँ।
-
-      आप मुझसे गणित, विज्ञान, अंग्रेजी,
-      सामान्य ज्ञान और होमवर्क के बारे में
-      सवाल पूछ सकते हैं।
-
-      आज आप क्या सीखना चाहते हैं?
+      मुझसे पढ़ाई से जुड़े कोई भी सवाल पूछिए।
+      मैं आपको आसान भाषा में समझाने की कोशिश करूँगा।
     </div>
   </div>
 
   <div class="input-area">
-    <input
-      type="text"
-      id="question"
-      placeholder="यहाँ अपना सवाल लिखें..."
-      autocomplete="off"
-    >
+    <input id="question"
+      placeholder="अपना सवाल यहाँ लिखें..."
+      autocomplete="off">
     <button id="sendBtn" onclick="sendMessage()">Send ➤</button>
   </div>
 
   <div class="tools">
-    <button class="tool-btn" onclick="ask('मुझे 10 GK प्रश्न दीजिए।')">🌍 GK Quiz</button>
-    <button class="tool-btn" onclick="ask('मुझे एक आसान Maths Quiz दीजिए।')">🔢 Maths Quiz</button>
-    <button class="tool-btn" onclick="ask('मुझे आज का Study Plan बनाकर दीजिए।')">📅 Study Plan</button>
-    <button class="tool-btn" onclick="ask('मुझे English के 10 नए शब्द सिखाइए।')">📖 English Words</button>
+    <button onclick="ask('मुझे Maths Quiz दीजिए।')">🔢 Maths Quiz</button>
+    <button onclick="ask('मुझे Science Quiz दीजिए।')">🔬 Science Quiz</button>
+    <button onclick="ask('मुझे 10 GK प्रश्न दीजिए।')">🌍 GK Quiz</button>
+    <button onclick="ask('मुझे आज का Study Plan बनाइए।')">📅 Study Plan</button>
   </div>
 
 </section>
 
 <section class="settings">
-  <h3>⚙️ AI API Settings</h3>
 
-  <label for="apiUrl">Backend API Endpoint</label>
-  <input id="apiUrl" type="text" value="/api/chat"
-    placeholder="https://your-server.com/api/chat">
+  <h2>⚙️ Groq API Settings</h2>
 
-  <label for="language">जवाब की भाषा</label>
+  <label for="apiKey">Groq API Key</label>
+  <input type="password" id="apiKey"
+    placeholder="अपनी Groq API Key यहाँ डालें">
+
+  <label for="model">AI Model</label>
+  <select id="model">
+    <option value="openai/gpt-oss-20b">GPT OSS 20B</option>
+  </select>
+
+  <label for="language">Response Language</label>
   <select id="language">
-    <option value="Hindi">हिंदी</option>
+    <option value="Hindi">Hindi</option>
     <option value="English">English</option>
     <option value="Both">Hindi + English</option>
   </select>
 
-  <button onclick="saveSettings()">💾 Settings Save करें</button>
+  <button onclick="saveSettings()">💾 Settings Save</button>
 
   <div class="status" id="status">
-    API: अभी कनेक्शन जाँचा नहीं गया है।
+    API Status: Not Connected
   </div>
 
   <p class="note">
-    जरूरी: AI चलाने के लिए अपना backend server बनाना होगा।
-    API secret key को HTML या JavaScript में कभी न डालें।
-    Backend को POST JSON स्वीकार करना चाहिए:
-    message, history और language। जवाब में
-    {"reply":"आपका जवाब"} भेजना होगा।
+    सुरक्षा: यह single-file demo सीधे Groq API को request भेजता है।
+    API Key केवल इस पेज की memory में रखी जाती है, सेव नहीं होती।
+    फिर भी browser में Key देखी जा सकती है।
+    इस version को public website पर इस्तेमाल न करें।
+    Public deployment के लिए सुरक्षित backend proxy जरूरी है।
   </p>
+
 </section>
 
 </main>
 
 <footer>
-  🎓 EduBot AI © 2026 | Smart Learning for Everyone
-  <br><br>
-  Made for Students ❤️
+  🎓 EduBot AI © 2026 | Smart Learning for Students
 </footer>
 
 <script>
+
+const API_URL =
+"https://api.groq.com/openai/v1/chat/completions";
+
 const messages = document.getElementById("messages");
 const questionInput = document.getElementById("question");
 const sendBtn = document.getElementById("sendBtn");
 
 let history = [];
 let busy = false;
+let groqKey = "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";
 
-function addMessage(text, type) {
+function addMessage(text,type){
+
   const div = document.createElement("div");
+
   div.className = "msg " + type;
   div.textContent = text;
+
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
+
   return div;
 }
 
-function ask(text) {
-  questionInput.value = text;
-  sendMessage();
-}
+function saveSettings(){
 
-function focusChat() {
-  questionInput.focus();
-  document.querySelector(".chat-box").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
+  const key = document.getElementById("apiKey").value.trim();
 
-function saveSettings() {
-  const url = document.getElementById("apiUrl").value.trim();
-  const language = document.getElementById("language").value;
-
-  if (!url) {
-    alert("कृपया API endpoint डालें।");
+  if(!key){
+    alert("कृपया Groq API Key डालें।");
     return;
   }
 
-  localStorage.setItem("edubot_api", url);
-  localStorage.setItem("edubot_language", language);
+  groqKey = key;
+
+  document.getElementById("apiKey").value = "";
 
   document.getElementById("status").textContent =
-    "Settings आपके ब्राउज़र में सेव हो गई हैं।";
+  "API Key इस पेज की memory में सेट है। अभी कनेक्शन टेस्ट नहीं हुआ है।";
 }
 
-function loadSettings() {
-  const url = localStorage.getItem("edubot_api");
-  const language = localStorage.getItem("edubot_language");
+function ask(text){
 
-  if (url) document.getElementById("apiUrl").value = url;
-  if (language) document.getElementById("language").value = language;
+  questionInput.value = text;
+  sendMessage();
+
 }
 
-function clearChat() {
-  if (!confirm("क्या आप पूरी चैट साफ करना चाहते हैं?")) return;
+function clearChat(){
 
   history = [];
   messages.innerHTML = "";
@@ -571,85 +413,156 @@ function clearChat() {
     "नमस्ते! 😊 मैं EduBot AI हूँ। अपना सवाल पूछिए।",
     "bot"
   );
+
 }
 
-async function sendMessage() {
+async function sendMessage(){
+
   const question = questionInput.value.trim();
 
-  if (!question || busy) return;
+  if(!question || busy) return;
 
-  addMessage(question, "user");
+  if(!groqKey){
+    alert("पहले Groq API Key डालकर Settings Save करें।");
+    return;
+  }
+
+  const model = document.getElementById("model").value;
+  const language = document.getElementById("language").value;
+
+  addMessage(question,"user");
   questionInput.value = "";
 
   busy = true;
   sendBtn.disabled = true;
 
-  const loading = addMessage("🤖 EduBot जवाब तैयार कर रहा है...", "bot typing");
+  const loading = addMessage(
+    "🤖 EduBot AI सोच रहा है...",
+    "bot typing"
+  );
 
-  try {
-    const endpoint = document.getElementById("apiUrl").value.trim();
-    const language = document.getElementById("language").value;
+  try{
 
-    if (!endpoint) {
-      throw new Error("पहले API endpoint डालें।");
-    }
+    const systemPrompt = `
+You are EduBot AI, a friendly school assistant.
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+Your job is to help students learn.
+
+Teach:
+1. Mathematics
+2. Science
+3. English
+4. General Knowledge
+5. Homework
+6. Study Planning
+
+Explain concepts in simple, student-friendly language.
+Give step-by-step explanations when needed.
+Be polite, accurate and educational.
+Do not invent facts.
+Respond in ${language}.
+`;
+
+    const response = await fetch(API_URL,{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer " + groqKey
       },
-      body: JSON.stringify({
-        message: question,
-        history: history.slice(-10),
-        language: language
-      })
-    });
 
-    if (!response.ok) {
-      throw new Error("Server Error: " + response.status);
-    }
+      body:JSON.stringify({
+
+        model:model,
+
+        messages:[
+          {
+            role:"system",
+            content:systemPrompt
+          },
+          ...history.slice(-10),
+          {
+            role:"user",
+            content:question
+          }
+        ],
+
+        temperature:0.7,
+        max_completion_tokens:1500
+
+      })
+
+    });
 
     const data = await response.json();
 
-    if (typeof data.reply !== "string" || !data.reply.trim()) {
-      throw new Error("Backend से सही जवाब नहीं मिला।");
+    if(!response.ok){
+
+      throw new Error(
+        data.error?.message ||
+        "API Error: " + response.status
+      );
+
     }
 
-    loading.textContent = data.reply;
+    const reply =
+      data.choices?.[0]?.message?.content;
+
+    if(!reply){
+      throw new Error("AI से कोई जवाब नहीं मिला।");
+    }
+
+    loading.textContent = reply;
     loading.classList.remove("typing");
 
     history.push(
-      { role: "user", content: question },
-      { role: "assistant", content: data.reply }
+      {role:"user",content:question},
+      {role:"assistant",content:reply}
     );
 
     history = history.slice(-20);
 
-  } catch (error) {
+    document.getElementById("status").textContent =
+      "API Status: Connected successfully";
+
+  }
+
+  catch(error){
+
     loading.textContent =
-      "⚠️ AI से कनेक्शन नहीं हो पाया।\n\n" +
+      "⚠️ AI Connection Error\n\n" +
       error.message +
-      "\n\nकृपया अपना Backend API और Server जाँचें।";
+      "\n\nAPI Key, model और network connection जाँचें।";
 
     loading.classList.remove("typing");
+
+    document.getElementById("status").textContent =
+      "API Status: Connection failed";
+
     console.error(error);
 
-  } finally {
+  }
+
+  finally{
+
     busy = false;
     sendBtn.disabled = false;
     questionInput.focus();
+
   }
+
 }
 
-questionInput.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
+questionInput.addEventListener("keydown",function(event){
+
+  if(event.key === "Enter"){
     event.preventDefault();
     sendMessage();
   }
+
 });
 
-loadSettings();
 </script>
 
 </body>
